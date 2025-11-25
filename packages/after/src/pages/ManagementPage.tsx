@@ -1,12 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
-import { Button, Badge } from "../components/atoms";
 import { Alert, Table, Modal } from "../components/organisms";
 import { FormInput, FormSelect, FormTextarea } from "../components/molecules";
 import { userService } from "../services/userService";
 import { postService } from "../services/postService";
 import type { User } from "../services/userService";
 import type { Post } from "../services/postService";
-import "../styles/components.css";
+import { Button } from "@/components/ui";
 
 type EntityType = "user" | "post";
 type Entity = User | Post;
@@ -44,6 +44,7 @@ export const ManagementPage: React.FC = () => {
 
       setData(result);
     } catch (error: any) {
+      console.error(error);
       setErrorMessage("데이터를 불러오는데 실패했습니다");
       setShowErrorAlert(true);
     }
@@ -272,6 +273,7 @@ export const ManagementPage: React.FC = () => {
           >
             관리 시스템 after
           </h1>
+
           <p style={{ color: "#666", fontSize: "14px" }}>
             사용자와 게시글을 관리하세요
           </p>
@@ -291,6 +293,7 @@ export const ManagementPage: React.FC = () => {
               paddingBottom: "5px",
             }}
           >
+            {/* TODO : Button 컴포넌트를 사용한 컴포넌트만 수정하는 것인지 다른 분들께 여쭤보기 */}
             <button
               onClick={() => setEntityType("post")}
               style={{
@@ -307,6 +310,7 @@ export const ManagementPage: React.FC = () => {
             >
               게시글
             </button>
+            {/* TODO : Button 컴포넌트를 사용한 컴포넌트만 수정하는 것인지 다른 분들께 여쭤보기 */}
             <button
               onClick={() => setEntityType("user")}
               style={{
@@ -327,7 +331,7 @@ export const ManagementPage: React.FC = () => {
           <div>
             <div style={{ marginBottom: "15px", textAlign: "right" }}>
               <Button
-                variant="primary"
+                variant="blue"
                 size="md"
                 onClick={() => setIsCreateModalOpen(true)}
               >
@@ -544,7 +548,7 @@ export const ManagementPage: React.FC = () => {
         footerContent={
           <>
             <Button
-              variant="secondary"
+              variant="gray"
               size="md"
               onClick={() => {
                 setIsCreateModalOpen(false);
@@ -553,7 +557,7 @@ export const ManagementPage: React.FC = () => {
             >
               취소
             </Button>
-            <Button variant="primary" size="md" onClick={handleCreate}>
+            <Button variant="blue" size="md" onClick={handleCreate}>
               생성
             </Button>
           </>
@@ -696,7 +700,7 @@ export const ManagementPage: React.FC = () => {
         footerContent={
           <>
             <Button
-              variant="secondary"
+              variant="gray"
               size="md"
               onClick={() => {
                 setIsEditModalOpen(false);
@@ -706,7 +710,7 @@ export const ManagementPage: React.FC = () => {
             >
               취소
             </Button>
-            <Button variant="primary" size="md" onClick={handleUpdate}>
+            <Button variant="blue" size="md" onClick={handleUpdate}>
               수정 완료
             </Button>
           </>
