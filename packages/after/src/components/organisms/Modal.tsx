@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
+import { CloseButton } from "../ui/Button/CloseButton";
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   title?: string;
   children: React.ReactNode;
-  size?: 'small' | 'medium' | 'large';
+  size?: "small" | "medium" | "large";
   showFooter?: boolean;
   footerContent?: React.ReactNode;
 }
@@ -15,24 +16,24 @@ export const Modal: React.FC<ModalProps> = ({
   onClose,
   title,
   children,
-  size = 'medium',
+  size = "medium",
   showFooter = false,
   footerContent,
 }) => {
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
   if (!isOpen) return null;
 
-  const modalClasses = ['modal-content', `modal-${size}`].join(' ');
+  const modalClasses = ["modal-content", `modal-${size}`].join(" ");
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -40,18 +41,12 @@ export const Modal: React.FC<ModalProps> = ({
         {title && (
           <div className="modal-header">
             <h3 className="modal-title">{title}</h3>
-            <button className="modal-close" onClick={onClose}>
-              ×
-            </button>
+            <CloseButton onClick={onClose}>x</CloseButton>
           </div>
         )}
-        <div className="modal-body">
-          {children}
-        </div>
+        <div className="modal-body">{children}</div>
         {showFooter && footerContent && (
-          <div className="modal-footer">
-            {footerContent}
-          </div>
+          <div className="modal-footer">{footerContent}</div>
         )}
       </div>
     </div>
