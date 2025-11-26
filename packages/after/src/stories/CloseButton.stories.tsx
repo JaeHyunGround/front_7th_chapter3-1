@@ -1,5 +1,5 @@
+import { CloseButton } from "@/components/ui/Button";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { CloseButton } from "../components/ui/Button/CloseButton";
 
 const meta = {
   title: "Components/CloseButton",
@@ -33,9 +33,7 @@ export const UsageExamples: Story = {
   render: () => (
     <div className="flex flex-col gap-6">
       <div>
-        <h3 className="text-sm font-semibold mb-3 text-gray-700">
-          모달 헤더
-        </h3>
+        <h3 className="text-sm font-semibold mb-3 text-gray-700">모달 헤더</h3>
         <div className="flex items-center justify-between p-4 border border-gray-300 rounded-md w-[400px]">
           <h2 className="text-lg font-bold">모달 제목</h2>
           <CloseButton />

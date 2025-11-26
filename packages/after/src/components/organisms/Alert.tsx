@@ -1,5 +1,5 @@
 import React from "react";
-import { CloseButton } from "../ui/Button/CloseButton";
+import { CloseButton } from "../ui/Button";
 
 // Alert - Different styling approach with inconsistent variants
 interface AlertProps {
