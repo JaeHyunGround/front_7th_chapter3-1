@@ -90,24 +90,6 @@
   --color-black: #000;
 }
 
-/* @utility badge-sm {
-  padding: 0 var(--spacing-4px);
-  font-size: var(--text-0625rem);
-  height: var(--height-16px);
-}
-
-@utility badge-md {
-  padding: 0 var(--spacing-8px);
-  font-size: var(--text-075rem);
-  height: var(--height-20px);
-}
-
-@utility badge-lg {
-  padding: 0 var(--spacing-10px);
-  font-size: var(--text-08125rem);
-  height: var(--height-24px);
-} */
-
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
