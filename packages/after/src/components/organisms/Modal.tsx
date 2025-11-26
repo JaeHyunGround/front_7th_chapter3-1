@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { CloseButton } from "../ui/Button";
+import { CloseButton } from "../ui/close-button";
 
 interface ModalProps {
   isOpen: boolean;

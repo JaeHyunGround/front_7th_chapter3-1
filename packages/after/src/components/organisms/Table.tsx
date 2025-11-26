@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
-import { Badge } from "../ui/common/badge";
-import { Button } from "../ui";
-import { PaginationButton } from "../ui/Button";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { PaginationButton } from "../ui/pagination-button";
 
 interface Column {
   key: string;

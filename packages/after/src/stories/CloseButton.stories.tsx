@@ -1,4 +1,4 @@
-import { CloseButton } from "@/components/ui/Button";
+import { CloseButton } from "@/components/ui/close-button";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {

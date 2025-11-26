@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Button } from "../common/button";
+import { Button } from "./button";
 
 export const PaginationButton = ({
   ...props

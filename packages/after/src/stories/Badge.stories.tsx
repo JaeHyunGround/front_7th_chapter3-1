@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Badge } from "../components/ui/common/badge";
+import { Badge } from "../components/ui/badge";
 import { CheckCircle, AlertCircle, Info, XCircle } from "lucide-react";
 
 const meta = {
@@ -123,9 +123,7 @@ export const UsageExamples: Story = {
   render: () => (
     <div className="flex flex-col gap-8">
       <div>
-        <h3 className="text-sm font-semibold mb-3 text-gray-700">
-          User Roles
-        </h3>
+        <h3 className="text-sm font-semibold mb-3 text-gray-700">User Roles</h3>
         <div className="flex gap-2 flex-wrap">
           <Badge variant="red">관리자</Badge>
           <Badge variant="orange">운영자</Badge>
@@ -152,9 +150,7 @@ export const UsageExamples: Story = {
       </div>
 
       <div>
-        <h3 className="text-sm font-semibold mb-3 text-gray-700">
-          Categories
-        </h3>
+        <h3 className="text-sm font-semibold mb-3 text-gray-700">Categories</h3>
         <div className="flex gap-2 flex-wrap">
           <Badge variant="blue" shape="pill">
             development

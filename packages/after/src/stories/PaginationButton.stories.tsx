@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { PaginationButton } from "../components/ui/Button/PaginationButton";
+import { PaginationButton } from "../components/ui/pagination-button";
 
 const meta = {
   title: "Components/PaginationButton",
@@ -53,9 +53,7 @@ export const States: Story = {
       </div>
 
       <div>
-        <h3 className="text-sm font-semibold mb-3 text-gray-700">
-          혼합 상태
-        </h3>
+        <h3 className="text-sm font-semibold mb-3 text-gray-700">혼합 상태</h3>
         <div className="flex gap-2 items-center">
           <PaginationButton disabled>이전</PaginationButton>
           <span className="px-3 py-1.5 text-sm">1 / 5</span>
@@ -79,8 +77,7 @@ export const UsageExamples: Story = {
       totalPages: number;
       currentPage: number;
     }) => {
-      const [currentPage, setCurrentPage] =
-        React.useState<number>(initialPage);
+      const [currentPage, setCurrentPage] = React.useState<number>(initialPage);
 
       return (
         <div className="flex gap-2 items-center">

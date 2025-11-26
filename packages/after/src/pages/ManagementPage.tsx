@@ -6,7 +6,7 @@ import { userService } from "../services/userService";
 import { postService } from "../services/postService";
 import type { User } from "../services/userService";
 import type { Post } from "../services/postService";
-import { Button } from "@/components/ui";
+import { Button } from "@/components/ui/button";
 
 type EntityType = "user" | "post";
 type Entity = User | Post;
