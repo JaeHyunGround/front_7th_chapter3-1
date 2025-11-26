@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Badge } from "../ui/common/badge";
 import { Button } from "../ui";
+import { PaginationButton } from "../ui/Button";
 
 interface Column {
   key: string;
@@ -330,53 +331,21 @@ export const Table: React.FC<TableProps> = ({
             justifyContent: "center",
           }}
         >
-          <button
+          <PaginationButton
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
             disabled={currentPage === 1}
-            style={{
-              padding: "6px 12px",
-              border: "1px solid #ddd",
-              background: "white",
-              borderRadius: "4px",
-              cursor: currentPage === 1 ? "not-allowed" : "pointer",
-            }}
           >
             이전
-          </button>
-          {/* TODO : Button 컴포넌트를 사용한 컴포넌트만 수정하는 것인지 다른 분들께 여쭤보기 */}
-          {/* <Button
-            disabled={currentPage === 1}
-            variant="pagination"
-            size="sm"
-            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-          >
-            이전
-          </Button> */}
+          </PaginationButton>
           <span style={{ padding: "6px 12px" }}>
             {currentPage} / {totalPages}
           </span>
-          <button
+          <PaginationButton
             onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
             disabled={currentPage === totalPages}
-            style={{
-              padding: "6px 12px",
-              border: "1px solid #ddd",
-              background: "white",
-              borderRadius: "4px",
-              cursor: currentPage === totalPages ? "not-allowed" : "pointer",
-            }}
           >
             다음
-          </button>
-          {/* TODO : Button 컴포넌트를 사용한 컴포넌트만 수정하는 것인지 다른 분들께 여쭤보기 */}
-          {/* <Button
-            disabled={currentPage === totalPages}
-            variant="pagination"
-            size="sm"
-            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-          >
-            다음
-          </Button> */}
+          </PaginationButton>
         </div>
       )}
     </div>
