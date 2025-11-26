@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
-import { Badge } from "../atoms/Badge";
+import { Badge } from "../ui/common/badge";
 import { Button } from "../ui";
 
 interface Column {
@@ -124,17 +124,37 @@ export const Table: React.FC<TableProps> = ({
     // 도메인별 특수 렌더링
     if (entityType === "user") {
       if (columnKey === "role") {
-        return <Badge userRole={value} showIcon />;
+        // User role을 variant로 매핑
+        const roleConfig: Record<
+          string,
+          { variant: "red" | "orange" | "blue" | "gray"; label: string }
+        > = {
+          admin: { variant: "red", label: "관리자" },
+          moderator: { variant: "orange", label: "운영자" },
+          user: { variant: "blue", label: "사용자" },
+          guest: { variant: "gray", label: "게스트" },
+        };
+        const config = roleConfig[value] || {
+          variant: "gray" as const,
+          label: value,
+        };
+        return <Badge variant={config.variant}>{config.label}</Badge>;
       }
       if (columnKey === "status") {
-        // User status를 Badge status로 변환
-        const badgeStatus =
-          value === "active"
-            ? "published"
-            : value === "inactive"
-            ? "draft"
-            : "rejected";
-        return <Badge status={badgeStatus} showIcon />;
+        // User status를 variant와 label로 매핑
+        const statusConfig: Record<
+          string,
+          { variant: "green" | "gray" | "red"; label: string }
+        > = {
+          active: { variant: "green", label: "Active" },
+          inactive: { variant: "gray", label: "Inactive" },
+          suspended: { variant: "red", label: "Suspended" },
+        };
+        const config = statusConfig[value] || {
+          variant: "gray" as const,
+          label: value,
+        };
+        return <Badge variant={config.variant}>{config.label}</Badge>;
       }
       if (columnKey === "lastLogin") {
         return value || "-";
@@ -155,22 +175,37 @@ export const Table: React.FC<TableProps> = ({
 
     if (entityType === "post") {
       if (columnKey === "category") {
-        const type =
-          value === "development"
-            ? "primary"
-            : value === "design"
-            ? "info"
-            : value === "accessibility"
-            ? "danger"
-            : "secondary";
+        // Category를 variant로 매핑
+        const categoryConfig: Record<
+          string,
+          "blue" | "red" | "green" | "orange" | "gray"
+        > = {
+          development: "blue",
+          design: "blue",
+          accessibility: "red",
+        };
+        const variant = categoryConfig[value] || "gray";
         return (
-          <Badge type={type} pill>
+          <Badge variant={variant} shape="pill">
             {value}
           </Badge>
         );
       }
       if (columnKey === "status") {
-        return <Badge status={value} showIcon />;
+        // Post status를 variant와 label로 매핑
+        const statusConfig: Record<
+          string,
+          { variant: "green" | "orange" | "gray"; label: string }
+        > = {
+          published: { variant: "green", label: "게시됨" },
+          draft: { variant: "orange", label: "임시저장" },
+          archived: { variant: "gray", label: "보관됨" },
+        };
+        const config = statusConfig[value] || {
+          variant: "gray" as const,
+          label: value,
+        };
+        return <Badge variant={config.variant}>{config.label}</Badge>;
       }
       if (columnKey === "views") {
         return value?.toLocaleString() || "0";
