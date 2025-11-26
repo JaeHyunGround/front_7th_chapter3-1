@@ -6,8 +6,6 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "build:after": "pnpm --filter @front_lite_chapter3-1/after build && cp packages/after/dist/index.html packages/after/dist/404.html",
-    "build:deploy": "pnpm build:after && pnpm build-storybook && mv packages/after/storybook-static packages/after/dist/storybook",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
