@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
-import { Alert, Table, Modal } from "../components/organisms";
+import { Table } from "../components/organisms";
 import { FormInput, FormSelect, FormTextarea } from "../components/molecules";
 import { userService } from "../services/userService";
 import { postService } from "../services/postService";
 import type { User } from "../services/userService";
 import type { Post } from "../services/postService";
 import { Button } from "@/components/ui/button";
+import { Alert } from "@/components/ui/alert";
+import { Modal } from "@/components/ui/modal";
 
 type EntityType = "user" | "post";
 type Entity = User | Post;
@@ -718,7 +720,7 @@ export const ManagementPage: React.FC = () => {
       >
         <div>
           {selectedItem && (
-            <Alert variant="info">
+            <Alert variant="info" className="mb-[16px]">
               ID: {selectedItem.id} | 생성일: {selectedItem.createdAt}
               {entityType === "post" &&
                 ` | 조회수: ${(selectedItem as Post).views}`}
