@@ -1,5 +1,5 @@
-import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/button";
+import { Modal } from "@/components/ui/modal";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 
@@ -141,10 +141,16 @@ export const Variants: Story = {
           <p>이 모달은 하단에 푸터가 있습니다.</p>
         </Modal>
 
-        <Modal isOpen={openModal === "noTitle"} onClose={() => setOpenModal(null)}>
+        <Modal
+          isOpen={openModal === "noTitle"}
+          onClose={() => setOpenModal(null)}
+        >
           <div className="space-y-2">
             <h3 className="text-lg font-semibold">커스텀 제목</h3>
-            <p>title prop을 전달하지 않으면 자유롭게 레이아웃을 구성할 수 있습니다.</p>
+            <p>
+              title prop을 전달하지 않으면 자유롭게 레이아웃을 구성할 수
+              있습니다.
+            </p>
           </div>
         </Modal>
 
@@ -158,8 +164,8 @@ export const Variants: Story = {
               <section key={num}>
                 <h3 className="font-semibold mb-2">{num}. 조항 제목</h3>
                 <p className="text-sm text-gray-600">
-                  이것은 긴 컨텐츠를 표시하는 예시입니다. 내용이 많을 경우 자동으로
-                  스크롤이 생성됩니다.
+                  이것은 긴 컨텐츠를 표시하는 예시입니다. 내용이 많을 경우
+                  자동으로 스크롤이 생성됩니다.
                 </p>
               </section>
             ))}
