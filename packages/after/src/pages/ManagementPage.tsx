@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
-import { FormInput, FormSelect, FormTextarea } from "../components/molecules";
 import { userService } from "../services/userService";
 import { postService } from "../services/postService";
 import type { User } from "../services/userService";
@@ -14,6 +13,9 @@ import { useTable } from "@/hooks/useTable";
 import { getUserColumns, getPostColumns } from "@/config/table-columns";
 import { StatsCard } from "@/components/ui/stats-card";
 import { useGetStats } from "@/hooks/useGetStats";
+import { UserForm } from "@/components/ui/user-form";
+import { PostForm } from "@/components/ui/post-form";
+import type { UserFormData, PostFormData } from "@/lib/validation";
 
 type EntityType = "user" | "post";
 type Entity = User | Post;
@@ -29,16 +31,16 @@ export const ManagementPage: React.FC = () => {
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [formData, setFormData] = useState<any>({});
+  const [editFormData, setEditFormData] = useState<Partial<UserFormData | PostFormData>>({});
 
   const { stats } = useGetStats(data, entityType);
 
   useEffect(() => {
     loadData();
-    setFormData({});
     setIsCreateModalOpen(false);
     setIsEditModalOpen(false);
     setSelectedItem(null);
+    setEditFormData({});
   }, [entityType]);
 
   const loadData = async () => {
@@ -59,31 +61,36 @@ export const ManagementPage: React.FC = () => {
     }
   };
 
-  const handleCreate = async () => {
+  const handleCreateUser = async (data: UserFormData) => {
     try {
-      if (entityType === "user") {
-        await userService.create({
-          username: formData.username,
-          email: formData.email,
-          role: formData.role || "user",
-          status: formData.status || "active",
-        });
-      } else {
-        await postService.create({
-          title: formData.title,
-          content: formData.content || "",
-          author: formData.author,
-          category: formData.category,
-          status: formData.status || "draft",
-        });
-      }
-
+      await userService.create({
+        username: data.username,
+        email: data.email,
+        role: data.role,
+        status: data.status,
+      });
       await loadData();
       setIsCreateModalOpen(false);
-      setFormData({});
-      setAlertMessage(
-        `${entityType === "user" ? "사용자" : "게시글"}가 생성되었습니다`
-      );
+      setAlertMessage("사용자가 생성되었습니다");
+      setShowSuccessAlert(true);
+    } catch (error: any) {
+      setErrorMessage(error.message || "생성에 실패했습니다");
+      setShowErrorAlert(true);
+    }
+  };
+
+  const handleCreatePost = async (data: PostFormData) => {
+    try {
+      await postService.create({
+        title: data.title,
+        content: data.content || "",
+        author: data.author,
+        category: data.category,
+        status: "draft",
+      });
+      await loadData();
+      setIsCreateModalOpen(false);
+      setAlertMessage("게시글이 생성되었습니다");
       setShowSuccessAlert(true);
     } catch (error: any) {
       setErrorMessage(error.message || "생성에 실패했습니다");
@@ -96,7 +103,7 @@ export const ManagementPage: React.FC = () => {
 
     if (entityType === "user") {
       const user = item as User;
-      setFormData({
+      setEditFormData({
         username: user.username,
         email: user.email,
         role: user.role,
@@ -104,35 +111,44 @@ export const ManagementPage: React.FC = () => {
       });
     } else {
       const post = item as Post;
-      setFormData({
+      setEditFormData({
         title: post.title,
         content: post.content,
         author: post.author,
-        category: post.category,
-        status: post.status,
+        category: post.category as "development" | "design" | "accessibility",
       });
     }
 
     setIsEditModalOpen(true);
   };
 
-  const handleUpdate = async () => {
+  const handleUpdateUser = async (data: UserFormData) => {
     if (!selectedItem) return;
 
     try {
-      if (entityType === "user") {
-        await userService.update(selectedItem.id, formData);
-      } else {
-        await postService.update(selectedItem.id, formData);
-      }
-
+      await userService.update(selectedItem.id, data);
       await loadData();
       setIsEditModalOpen(false);
-      setFormData({});
+      setEditFormData({});
       setSelectedItem(null);
-      setAlertMessage(
-        `${entityType === "user" ? "사용자" : "게시글"}가 수정되었습니다`
-      );
+      setAlertMessage("사용자가 수정되었습니다");
+      setShowSuccessAlert(true);
+    } catch (error: any) {
+      setErrorMessage(error.message || "수정에 실패했습니다");
+      setShowErrorAlert(true);
+    }
+  };
+
+  const handleUpdatePost = async (data: PostFormData) => {
+    if (!selectedItem) return;
+
+    try {
+      await postService.update(selectedItem.id, data);
+      await loadData();
+      setIsEditModalOpen(false);
+      setEditFormData({});
+      setSelectedItem(null);
+      setAlertMessage("게시글이 수정되었습니다");
       setShowSuccessAlert(true);
     } catch (error: any) {
       setErrorMessage(error.message || "수정에 실패했습니다");
@@ -292,7 +308,6 @@ export const ManagementPage: React.FC = () => {
         isOpen={isCreateModalOpen}
         onClose={() => {
           setIsCreateModalOpen(false);
-          setFormData({});
         }}
         title={`새 ${entityType === "user" ? "사용자" : "게시글"} 만들기`}
         size="large"
@@ -304,146 +319,39 @@ export const ManagementPage: React.FC = () => {
               size="md"
               onClick={() => {
                 setIsCreateModalOpen(false);
-                setFormData({});
               }}
             >
               취소
             </Button>
-            <Button variant="blue" size="md" onClick={handleCreate}>
+            <Button
+              variant="blue"
+              size="md"
+              type="submit"
+              form={entityType === "user" ? "create-user-form" : "create-post-form"}
+            >
               생성
             </Button>
           </>
         }
       >
-        <div>
-          {entityType === "user" ? (
-            <>
-              <FormInput
-                name="username"
-                value={formData.username || ""}
-                onChange={(value) =>
-                  setFormData({ ...formData, username: value })
-                }
-                label="사용자명"
-                placeholder="사용자명을 입력하세요"
-                required
-                width="full"
-                fieldType="username"
-              />
-              <FormInput
-                name="email"
-                value={formData.email || ""}
-                onChange={(value) => setFormData({ ...formData, email: value })}
-                label="이메일"
-                placeholder="이메일을 입력하세요"
-                type="email"
-                required
-                width="full"
-                fieldType="email"
-              />
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: "16px",
-                }}
-              >
-                <FormSelect
-                  name="role"
-                  value={formData.role || "user"}
-                  onChange={(value) =>
-                    setFormData({ ...formData, role: value })
-                  }
-                  options={[
-                    { value: "user", label: "사용자" },
-                    { value: "moderator", label: "운영자" },
-                    { value: "admin", label: "관리자" },
-                  ]}
-                  label="역할"
-                  size="md"
-                />
-                <FormSelect
-                  name="status"
-                  value={formData.status || "active"}
-                  onChange={(value) =>
-                    setFormData({ ...formData, status: value })
-                  }
-                  options={[
-                    { value: "active", label: "활성" },
-                    { value: "inactive", label: "비활성" },
-                    { value: "suspended", label: "정지" },
-                  ]}
-                  label="상태"
-                  size="md"
-                />
-              </div>
-            </>
-          ) : (
-            <>
-              <FormInput
-                name="title"
-                value={formData.title || ""}
-                onChange={(value) => setFormData({ ...formData, title: value })}
-                label="제목"
-                placeholder="게시글 제목을 입력하세요"
-                required
-                width="full"
-                fieldType="postTitle"
-              />
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: "16px",
-                }}
-              >
-                <FormInput
-                  name="author"
-                  value={formData.author || ""}
-                  onChange={(value) =>
-                    setFormData({ ...formData, author: value })
-                  }
-                  label="작성자"
-                  placeholder="작성자명"
-                  required
-                  width="full"
-                />
-                <FormSelect
-                  name="category"
-                  value={formData.category || ""}
-                  onChange={(value) =>
-                    setFormData({ ...formData, category: value })
-                  }
-                  options={[
-                    { value: "development", label: "Development" },
-                    { value: "design", label: "Design" },
-                    { value: "accessibility", label: "Accessibility" },
-                  ]}
-                  label="카테고리"
-                  placeholder="카테고리 선택"
-                  size="md"
-                />
-              </div>
-              <FormTextarea
-                name="content"
-                value={formData.content || ""}
-                onChange={(value) =>
-                  setFormData({ ...formData, content: value })
-                }
-                label="내용"
-                placeholder="게시글 내용을 입력하세요"
-                rows={6}
-              />
-            </>
-          )}
-        </div>
+        {entityType === "user" ? (
+          <UserForm
+            formId="create-user-form"
+            onSubmit={handleCreateUser}
+          />
+        ) : (
+          <PostForm
+            formId="create-post-form"
+            onSubmit={handleCreatePost}
+          />
+        )}
       </Modal>
 
       <Modal
         isOpen={isEditModalOpen}
         onClose={() => {
           setIsEditModalOpen(false);
-          setFormData({});
+          setEditFormData({});
           setSelectedItem(null);
         }}
         title={`${entityType === "user" ? "사용자" : "게시글"} 수정`}
@@ -456,13 +364,18 @@ export const ManagementPage: React.FC = () => {
               size="md"
               onClick={() => {
                 setIsEditModalOpen(false);
-                setFormData({});
+                setEditFormData({});
                 setSelectedItem(null);
               }}
             >
               취소
             </Button>
-            <Button variant="blue" size="md" onClick={handleUpdate}>
+            <Button
+              variant="blue"
+              size="md"
+              type="submit"
+              form={entityType === "user" ? "edit-user-form" : "edit-post-form"}
+            >
               수정 완료
             </Button>
           </>
@@ -478,124 +391,17 @@ export const ManagementPage: React.FC = () => {
           )}
 
           {entityType === "user" ? (
-            <>
-              <FormInput
-                name="username"
-                value={formData.username || ""}
-                onChange={(value) =>
-                  setFormData({ ...formData, username: value })
-                }
-                label="사용자명"
-                placeholder="사용자명을 입력하세요"
-                required
-                width="full"
-                fieldType="username"
-              />
-              <FormInput
-                name="email"
-                value={formData.email || ""}
-                onChange={(value) => setFormData({ ...formData, email: value })}
-                label="이메일"
-                placeholder="이메일을 입력하세요"
-                type="email"
-                required
-                width="full"
-                fieldType="email"
-              />
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: "16px",
-                }}
-              >
-                <FormSelect
-                  name="role"
-                  value={formData.role || "user"}
-                  onChange={(value) =>
-                    setFormData({ ...formData, role: value })
-                  }
-                  options={[
-                    { value: "user", label: "사용자" },
-                    { value: "moderator", label: "운영자" },
-                    { value: "admin", label: "관리자" },
-                  ]}
-                  label="역할"
-                  size="md"
-                />
-                <FormSelect
-                  name="status"
-                  value={formData.status || "active"}
-                  onChange={(value) =>
-                    setFormData({ ...formData, status: value })
-                  }
-                  options={[
-                    { value: "active", label: "활성" },
-                    { value: "inactive", label: "비활성" },
-                    { value: "suspended", label: "정지" },
-                  ]}
-                  label="상태"
-                  size="md"
-                />
-              </div>
-            </>
+            <UserForm
+              formId="edit-user-form"
+              defaultValues={editFormData as Partial<UserFormData>}
+              onSubmit={handleUpdateUser}
+            />
           ) : (
-            <>
-              <FormInput
-                name="title"
-                value={formData.title || ""}
-                onChange={(value) => setFormData({ ...formData, title: value })}
-                label="제목"
-                placeholder="게시글 제목을 입력하세요"
-                required
-                width="full"
-                fieldType="postTitle"
-              />
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: "16px",
-                }}
-              >
-                <FormInput
-                  name="author"
-                  value={formData.author || ""}
-                  onChange={(value) =>
-                    setFormData({ ...formData, author: value })
-                  }
-                  label="작성자"
-                  placeholder="작성자명"
-                  required
-                  width="full"
-                />
-                <FormSelect
-                  name="category"
-                  value={formData.category || ""}
-                  onChange={(value) =>
-                    setFormData({ ...formData, category: value })
-                  }
-                  options={[
-                    { value: "development", label: "Development" },
-                    { value: "design", label: "Design" },
-                    { value: "accessibility", label: "Accessibility" },
-                  ]}
-                  label="카테고리"
-                  placeholder="카테고리 선택"
-                  size="md"
-                />
-              </div>
-              <FormTextarea
-                name="content"
-                value={formData.content || ""}
-                onChange={(value) =>
-                  setFormData({ ...formData, content: value })
-                }
-                label="내용"
-                placeholder="게시글 내용을 입력하세요"
-                rows={6}
-              />
-            </>
+            <PostForm
+              formId="edit-post-form"
+              defaultValues={editFormData as Partial<PostFormData>}
+              onSubmit={handleUpdatePost}
+            />
           )}
         </div>
       </Modal>
