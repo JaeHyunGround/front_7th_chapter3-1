@@ -1,4 +1,5 @@
 import { Header } from "@/components/ui/header";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {
@@ -8,6 +9,13 @@ const meta = {
     layout: "fullscreen",
   },
   tags: ["autodocs"],
+  decorators: [
+    (Story) => (
+      <ThemeProvider>
+        <Story />
+      </ThemeProvider>
+    ),
+  ],
 } satisfies Meta<typeof Header>;
 
 export default meta;
