@@ -12,6 +12,7 @@ import { Table } from "@/components/ui/table";
 import { TablePagination } from "@/components/ui/table-pagination";
 import { useTable } from "@/hooks/useTable";
 import { getUserColumns, getPostColumns } from "@/config/table-columns";
+import { StatsCard } from "@/components/ui/stats-card";
 
 type EntityType = "user" | "post";
 type Entity = User | Post;
@@ -184,56 +185,66 @@ export const ManagementPage: React.FC = () => {
   const getStats = () => {
     if (entityType === "user") {
       const users = data as User[];
-      return {
-        total: users.length,
-        stat1: {
+      return [
+        {
+          type: "blue",
+          label: "전체",
+          value: users.length,
+        },
+        {
+          type: "green",
           label: "활성",
           value: users.filter((u) => u.status === "active").length,
-          color: "#2e7d32",
         },
-        stat2: {
+        {
+          type: "orange",
           label: "비활성",
           value: users.filter((u) => u.status === "inactive").length,
-          color: "#ed6c02",
         },
-        stat3: {
+        {
+          type: "red",
           label: "정지",
           value: users.filter((u) => u.status === "suspended").length,
-          color: "#d32f2f",
         },
-        stat4: {
+        {
+          type: "gray",
           label: "관리자",
           value: users.filter((u) => u.role === "admin").length,
-          color: "#1976d2",
         },
-      };
+      ] as const;
     } else {
       const posts = data as Post[];
-      return {
-        total: posts.length,
-        stat1: {
+      return [
+        {
+          type: "blue",
+          label: "전체",
+          value: posts.length,
+        },
+        {
+          type: "green",
           label: "게시됨",
           value: posts.filter((p) => p.status === "published").length,
-          color: "#2e7d32",
         },
-        stat2: {
+        {
+          type: "orange",
           label: "임시저장",
           value: posts.filter((p) => p.status === "draft").length,
-          color: "#ed6c02",
         },
-        stat3: {
+        {
+          type: "red",
           label: "보관됨",
           value: posts.filter((p) => p.status === "archived").length,
-          color: "rgba(0, 0, 0, 0.6)",
         },
-        stat4: {
+        {
+          type: "gray",
           label: "총 조회수",
           value: posts.reduce((sum, p) => sum + p.views, 0),
-          color: "#1976d2",
         },
-      };
+      ] as const;
     }
   };
+
+  const stats = getStats();
 
   // Column 설정
   const columns =
@@ -257,8 +268,6 @@ export const ManagementPage: React.FC = () => {
     itemsPerPage: 10,
     searchable: true,
   });
-
-  const stats = getStats();
 
   return (
     <div style={{ minHeight: "100vh", background: "#f0f0f0" }}>
@@ -372,145 +381,14 @@ export const ManagementPage: React.FC = () => {
                 marginBottom: "15px",
               }}
             >
-              <div
-                style={{
-                  padding: "12px 15px",
-                  background: "#e3f2fd",
-                  border: "1px solid #90caf9",
-                  borderRadius: "3px",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "12px",
-                    color: "#666",
-                    marginBottom: "4px",
-                  }}
-                >
-                  전체
-                </div>
-                <div
-                  style={{
-                    fontSize: "24px",
-                    fontWeight: "bold",
-                    color: "#1976d2",
-                  }}
-                >
-                  {stats.total}
-                </div>
-              </div>
-
-              <div
-                style={{
-                  padding: "12px 15px",
-                  background: "#e8f5e9",
-                  border: "1px solid #81c784",
-                  borderRadius: "3px",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "12px",
-                    color: "#666",
-                    marginBottom: "4px",
-                  }}
-                >
-                  {stats.stat1.label}
-                </div>
-                <div
-                  style={{
-                    fontSize: "24px",
-                    fontWeight: "bold",
-                    color: "#388e3c",
-                  }}
-                >
-                  {stats.stat1.value}
-                </div>
-              </div>
-
-              <div
-                style={{
-                  padding: "12px 15px",
-                  background: "#fff3e0",
-                  border: "1px solid #ffb74d",
-                  borderRadius: "3px",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "12px",
-                    color: "#666",
-                    marginBottom: "4px",
-                  }}
-                >
-                  {stats.stat2.label}
-                </div>
-                <div
-                  style={{
-                    fontSize: "24px",
-                    fontWeight: "bold",
-                    color: "#f57c00",
-                  }}
-                >
-                  {stats.stat2.value}
-                </div>
-              </div>
-
-              <div
-                style={{
-                  padding: "12px 15px",
-                  background: "#ffebee",
-                  border: "1px solid #e57373",
-                  borderRadius: "3px",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "12px",
-                    color: "#666",
-                    marginBottom: "4px",
-                  }}
-                >
-                  {stats.stat3.label}
-                </div>
-                <div
-                  style={{
-                    fontSize: "24px",
-                    fontWeight: "bold",
-                    color: "#d32f2f",
-                  }}
-                >
-                  {stats.stat3.value}
-                </div>
-              </div>
-
-              <div
-                style={{
-                  padding: "12px 15px",
-                  background: "#f5f5f5",
-                  border: "1px solid #bdbdbd",
-                  borderRadius: "3px",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "12px",
-                    color: "#666",
-                    marginBottom: "4px",
-                  }}
-                >
-                  {stats.stat4.label}
-                </div>
-                <div
-                  style={{
-                    fontSize: "24px",
-                    fontWeight: "bold",
-                    color: "#424242",
-                  }}
-                >
-                  {stats.stat4.value}
-                </div>
-              </div>
+              {stats.map(({ type, label, value }, index) => (
+                <StatsCard
+                  key={index}
+                  type={type}
+                  label={label}
+                  value={value}
+                />
+              ))}
             </div>
 
             <div
