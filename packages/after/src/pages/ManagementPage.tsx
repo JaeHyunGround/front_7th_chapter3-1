@@ -31,7 +31,9 @@ export const ManagementPage: React.FC = () => {
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [editFormData, setEditFormData] = useState<Partial<UserFormData | PostFormData>>({});
+  const [editFormData, setEditFormData] = useState<
+    Partial<UserFormData | PostFormData>
+  >({});
 
   const { stats } = useGetStats(data, entityType);
 
@@ -224,16 +226,20 @@ export const ManagementPage: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-800 transition-colors">
       <div className="max-w-[1200px] mx-auto p-5">
         <div className="mb-5">
-          <h1 className="text-2xl font-bold md-1 text-gray-800">관리 시스템</h1>
+          <h1 className="text-2xl font-bold md-1 text-gray-800 dark:text-gray-100">
+            관리 시스템
+          </h1>
 
-          <p className="text-gray-500 text-sm">사용자와 게시글을 관리하세요</p>
+          <p className="text-gray-500 dark:text-gray-400 text-sm">
+            사용자와 게시글을 관리하세요
+          </p>
         </div>
 
-        <div className="bg-white border border-gray-300 p-2.5">
-          <div className="mb-4 border-b-2 border-gray-300 pb-2 flex gap-1">
+        <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 p-2.5 transition-colors">
+          <div className="mb-4 border-b-2 border-gray-300 dark:border-gray-700 pb-2 flex gap-1">
             <Button
               onClick={() => setEntityType("post")}
               variant={entityType === "post" ? "blue" : "gray"}
@@ -296,7 +302,7 @@ export const ManagementPage: React.FC = () => {
               ))}
             </div>
 
-            <div className="border border-gray-300 bg-white overflow-auto">
+            <div className="border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-auto transition-colors">
               <Table table={table} striped hover />
               <TablePagination table={table} />
             </div>
@@ -327,7 +333,9 @@ export const ManagementPage: React.FC = () => {
               variant="blue"
               size="md"
               type="submit"
-              form={entityType === "user" ? "create-user-form" : "create-post-form"}
+              form={
+                entityType === "user" ? "create-user-form" : "create-post-form"
+              }
             >
               생성
             </Button>
@@ -335,15 +343,9 @@ export const ManagementPage: React.FC = () => {
         }
       >
         {entityType === "user" ? (
-          <UserForm
-            formId="create-user-form"
-            onSubmit={handleCreateUser}
-          />
+          <UserForm formId="create-user-form" onSubmit={handleCreateUser} />
         ) : (
-          <PostForm
-            formId="create-post-form"
-            onSubmit={handleCreatePost}
-          />
+          <PostForm formId="create-post-form" onSubmit={handleCreatePost} />
         )}
       </Modal>
 
