@@ -227,53 +227,22 @@ export const ManagementPage: React.FC = () => {
           </p>
         </div>
 
-        <div
-          style={{
-            background: "white",
-            border: "1px solid #ddd",
-            padding: "10px",
-          }}
-        >
-          <div
-            style={{
-              marginBottom: "15px",
-              borderBottom: "2px solid #ccc",
-              paddingBottom: "5px",
-            }}
-          >
-            {/* TODO : Button 컴포넌트를 사용한 컴포넌트만 수정하는 것인지 다른 분들께 여쭤보기 */}
-            <button
+        <div className="bg-white border border-gray-300 p-2.5">
+          <div className="mb-4 border-b-2 border-gray-300 pb-2 flex gap-1">
+            <Button
               onClick={() => setEntityType("post")}
-              style={{
-                padding: "8px 16px",
-                marginRight: "5px",
-                fontSize: "14px",
-                fontWeight: entityType === "post" ? "bold" : "normal",
-                border: "1px solid #999",
-                background: entityType === "post" ? "#1976d2" : "#f5f5f5",
-                color: entityType === "post" ? "white" : "#333",
-                cursor: "pointer",
-                borderRadius: "3px",
-              }}
+              variant={entityType === "post" ? "blue" : "gray"}
+              size="md"
             >
               게시글
-            </button>
-            {/* TODO : Button 컴포넌트를 사용한 컴포넌트만 수정하는 것인지 다른 분들께 여쭤보기 */}
-            <button
+            </Button>
+            <Button
               onClick={() => setEntityType("user")}
-              style={{
-                padding: "8px 16px",
-                fontSize: "14px",
-                fontWeight: entityType === "user" ? "bold" : "normal",
-                border: "1px solid #999",
-                background: entityType === "user" ? "#1976d2" : "#f5f5f5",
-                color: entityType === "user" ? "white" : "#333",
-                cursor: "pointer",
-                borderRadius: "3px",
-              }}
+              variant={entityType === "user" ? "blue" : "gray"}
+              size="md"
             >
               사용자
-            </button>
+            </Button>
           </div>
 
           <div>
