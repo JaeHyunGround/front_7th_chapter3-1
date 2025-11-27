@@ -7,7 +7,7 @@ export const CloseButton = ({ ...props }: React.ComponentProps<"button">) => {
       variant="none"
       size="none"
       className={cn([
-        "text-[24px] w-[24px] h-[24px] shrink-0 leading-1 border-none",
+        "text-[24px] w-[24px] h-[24px] shrink-0 leading-1 outline-none focus:outline-none rounded-full",
         props.className,
       ])}
       {...props}
