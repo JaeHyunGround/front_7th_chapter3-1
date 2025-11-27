@@ -208,23 +208,12 @@ export const ManagementPage: React.FC = () => {
   });
 
   return (
-    <div style={{ minHeight: "100vh", background: "#f0f0f0" }}>
-      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "20px" }}>
-        <div style={{ marginBottom: "20px" }}>
-          <h1
-            style={{
-              fontSize: "24px",
-              fontWeight: "bold",
-              marginBottom: "5px",
-              color: "#333",
-            }}
-          >
-            관리 시스템
-          </h1>
+    <div className="min-h-screen bg-gray-100">
+      <div className="max-w-[1200px] mx-auto p-5">
+        <div className="mb-5">
+          <h1 className="text-2xl font-bold md-1 text-gray-800">관리 시스템</h1>
 
-          <p style={{ color: "#666", fontSize: "14px" }}>
-            사용자와 게시글을 관리하세요
-          </p>
+          <p className="text-gray-500 text-sm">사용자와 게시글을 관리하세요</p>
         </div>
 
         <div className="bg-white border border-gray-300 p-2.5">
@@ -246,7 +235,7 @@ export const ManagementPage: React.FC = () => {
           </div>
 
           <div>
-            <div style={{ marginBottom: "15px", textAlign: "right" }}>
+            <div className="mb-4 text-right">
               <Button
                 variant="blue"
                 size="md"
@@ -280,14 +269,7 @@ export const ManagementPage: React.FC = () => {
               </div>
             )}
 
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))",
-                gap: "10px",
-                marginBottom: "15px",
-              }}
-            >
+            <div className="grid gap-2.5 mb-4 grid-cols-[repeat(auto-fit,minmax(130px,1fr))]">
               {stats.map(({ type, label, value }, index) => (
                 <StatsCard
                   key={index}
@@ -298,13 +280,7 @@ export const ManagementPage: React.FC = () => {
               ))}
             </div>
 
-            <div
-              style={{
-                border: "1px solid #ddd",
-                background: "white",
-                overflow: "auto",
-              }}
-            >
+            <div className="border border-gray-300 bg-white overflow-auto">
               <Table table={table} striped hover />
               <TablePagination table={table} />
             </div>
