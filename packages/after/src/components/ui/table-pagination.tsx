@@ -33,7 +33,7 @@ export function TablePagination<T>({ table }: TablePaginationProps<T>) {
       >
         이전
       </PaginationButton>
-      <span className="px-3 py-1.5 text-gray-800">
+      <span className="px-3 py-1.5 text-gray-800 dark:text-gray-200">
         {currentPage} / {totalPages}
       </span>
       <PaginationButton
