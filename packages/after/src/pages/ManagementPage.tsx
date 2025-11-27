@@ -13,6 +13,7 @@ import { TablePagination } from "@/components/ui/table-pagination";
 import { useTable } from "@/hooks/useTable";
 import { getUserColumns, getPostColumns } from "@/config/table-columns";
 import { StatsCard } from "@/components/ui/stats-card";
+import { useGetStats } from "@/hooks/useGetStats";
 
 type EntityType = "user" | "post";
 type Entity = User | Post;
@@ -29,6 +30,8 @@ export const ManagementPage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const [formData, setFormData] = useState<any>({});
+
+  const { stats } = useGetStats(data, entityType);
 
   useEffect(() => {
     loadData();
@@ -182,70 +185,6 @@ export const ManagementPage: React.FC = () => {
     }
   };
 
-  const getStats = () => {
-    if (entityType === "user") {
-      const users = data as User[];
-      return [
-        {
-          type: "blue",
-          label: "전체",
-          value: users.length,
-        },
-        {
-          type: "green",
-          label: "활성",
-          value: users.filter((u) => u.status === "active").length,
-        },
-        {
-          type: "orange",
-          label: "비활성",
-          value: users.filter((u) => u.status === "inactive").length,
-        },
-        {
-          type: "red",
-          label: "정지",
-          value: users.filter((u) => u.status === "suspended").length,
-        },
-        {
-          type: "gray",
-          label: "관리자",
-          value: users.filter((u) => u.role === "admin").length,
-        },
-      ] as const;
-    } else {
-      const posts = data as Post[];
-      return [
-        {
-          type: "blue",
-          label: "전체",
-          value: posts.length,
-        },
-        {
-          type: "green",
-          label: "게시됨",
-          value: posts.filter((p) => p.status === "published").length,
-        },
-        {
-          type: "orange",
-          label: "임시저장",
-          value: posts.filter((p) => p.status === "draft").length,
-        },
-        {
-          type: "red",
-          label: "보관됨",
-          value: posts.filter((p) => p.status === "archived").length,
-        },
-        {
-          type: "gray",
-          label: "총 조회수",
-          value: posts.reduce((sum, p) => sum + p.views, 0),
-        },
-      ] as const;
-    }
-  };
-
-  const stats = getStats();
-
   // Column 설정
   const columns =
     entityType === "user"
@@ -261,7 +200,6 @@ export const ManagementPage: React.FC = () => {
           onRestore: (id: number) => handleStatusAction(id, "restore"),
         });
 
-  // useTable 훅 사용
   const table = useTable({
     data: data as any,
     columns: columns as any,
