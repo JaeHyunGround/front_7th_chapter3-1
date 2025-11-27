@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
-import { Table } from "../components/organisms";
 import { FormInput, FormSelect, FormTextarea } from "../components/molecules";
 import { userService } from "../services/userService";
 import { postService } from "../services/postService";
@@ -9,6 +8,10 @@ import type { Post } from "../services/postService";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
 import { Modal } from "@/components/ui/modal";
+import { Table } from "@/components/ui/table";
+import { TablePagination } from "@/components/ui/table-pagination";
+import { useTable } from "@/hooks/useTable";
+import { getUserColumns, getPostColumns } from "@/config/table-columns";
 
 type EntityType = "user" | "post";
 type Entity = User | Post;
@@ -232,32 +235,28 @@ export const ManagementPage: React.FC = () => {
     }
   };
 
-  // 🚨 Table 컴포넌트에 로직을 위임하여 간소화
-  const renderTableColumns = () => {
-    if (entityType === "user") {
-      return [
-        { key: "id", header: "ID", width: "60px" },
-        { key: "username", header: "사용자명", width: "150px" },
-        { key: "email", header: "이메일" },
-        { key: "role", header: "역할", width: "120px" },
-        { key: "status", header: "상태", width: "120px" },
-        { key: "createdAt", header: "생성일", width: "120px" },
-        { key: "lastLogin", header: "마지막 로그인", width: "140px" },
-        { key: "actions", header: "관리", width: "200px" },
-      ];
-    } else {
-      return [
-        { key: "id", header: "ID", width: "60px" },
-        { key: "title", header: "제목" },
-        { key: "author", header: "작성자", width: "120px" },
-        { key: "category", header: "카테고리", width: "140px" },
-        { key: "status", header: "상태", width: "120px" },
-        { key: "views", header: "조회수", width: "100px" },
-        { key: "createdAt", header: "작성일", width: "120px" },
-        { key: "actions", header: "관리", width: "250px" },
-      ];
-    }
-  };
+  // Column 설정
+  const columns =
+    entityType === "user"
+      ? getUserColumns({
+          onEdit: handleEdit,
+          onDelete: handleDelete,
+        })
+      : getPostColumns({
+          onEdit: handleEdit,
+          onDelete: handleDelete,
+          onPublish: (id: number) => handleStatusAction(id, "publish"),
+          onArchive: (id: number) => handleStatusAction(id, "archive"),
+          onRestore: (id: number) => handleStatusAction(id, "restore"),
+        });
+
+  // useTable 훅 사용
+  const table = useTable({
+    data: data as any,
+    columns: columns as any,
+    itemsPerPage: 10,
+    searchable: true,
+  });
 
   const stats = getStats();
 
@@ -273,7 +272,7 @@ export const ManagementPage: React.FC = () => {
               color: "#333",
             }}
           >
-            관리 시스템 after
+            관리 시스템
           </h1>
 
           <p style={{ color: "#666", fontSize: "14px" }}>
@@ -521,18 +520,8 @@ export const ManagementPage: React.FC = () => {
                 overflow: "auto",
               }}
             >
-              <Table
-                columns={renderTableColumns()}
-                data={data}
-                striped
-                hover
-                entityType={entityType}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-                onPublish={(id) => handleStatusAction(id, "publish")}
-                onArchive={(id) => handleStatusAction(id, "archive")}
-                onRestore={(id) => handleStatusAction(id, "restore")}
-              />
+              <Table table={table} striped hover />
+              <TablePagination table={table} />
             </div>
           </div>
         </div>
