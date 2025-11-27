@@ -54,7 +54,7 @@ export function Modal({
           </DialogHeader>
         )}
 
-        <div className="overflow-y-auto flex-1">{children}</div>
+        <div className="overflow-y-auto max-h-[60vh]">{children}</div>
 
         {showFooter && footerContent && (
           <DialogFooter>{footerContent}</DialogFooter>
