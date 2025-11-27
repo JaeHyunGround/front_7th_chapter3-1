@@ -42,7 +42,7 @@ export interface UseTableReturn<T> {
   endIndex: number;
 }
 
-export function useTable<T extends Record<string, unknown>>({
+export function useTable<T>({
   data,
   columns,
   itemsPerPage = 10,
@@ -61,7 +61,7 @@ export function useTable<T extends Record<string, unknown>>({
 
     const lowerSearchTerm = searchTerm.toLowerCase();
     return data.filter((row) =>
-      Object.values(row).some((value) =>
+      Object.values(row as Record<string, unknown>).some((value) =>
         String(value).toLowerCase().includes(lowerSearchTerm)
       )
     );
@@ -74,8 +74,8 @@ export function useTable<T extends Record<string, unknown>>({
     }
 
     return [...filteredData].sort((a, b) => {
-      const aValue = a[sortColumn];
-      const bValue = b[sortColumn];
+      const aValue = (a as Record<string, unknown>)[sortColumn];
+      const bValue = (b as Record<string, unknown>)[sortColumn];
 
       if (aValue === bValue) return 0;
 

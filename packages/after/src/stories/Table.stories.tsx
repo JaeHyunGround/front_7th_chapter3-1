@@ -9,12 +9,11 @@ import { useState } from "react";
 
 const meta = {
   title: "Components/Table",
-  component: Table,
   parameters: {
     layout: "padded",
   },
   tags: ["autodocs"],
-} satisfies Meta<typeof Table>;
+} satisfies Meta;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -142,7 +141,7 @@ const UserTableComponent = () => {
     },
   });
 
-  const table = useTable({
+  const table = useTable<User>({
     data: sampleUsers,
     columns,
     itemsPerPage: 5,
@@ -208,7 +207,7 @@ const PostTableComponent = () => {
     },
   });
 
-  const table = useTable({
+  const table = useTable<Post>({
     data: samplePosts,
     columns,
     itemsPerPage: 5,
